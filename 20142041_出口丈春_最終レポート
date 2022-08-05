@@ -1,0 +1,78 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<random>
+using namespace std;
+
+struct Card{
+private:
+    string card;
+public:
+    Card(const string card):
+	card(card){}
+	friend ostream& operator << (ostream& a, Card* Card);
+};
+
+ostream& operator<<(ostream& a, Card* Card){
+	a << Card->card;
+    return a;
+}
+
+struct Card_pre : public Card{
+public:
+	int i;
+    string Mark;
+	
+	int j;
+	string Num;
+	
+	Card_pre(const int i, const string Mark, const int j, const string Num ):
+	Card(Mark+Num),
+	i(i),
+	Mark(Mark),
+	j(j),
+	Num(Num)
+	{}
+};
+
+struct Total{
+public:
+	vector<Card*> v;
+	Total():
+	random(rand_dev()){
+		vector<string> Mark = {
+			"S","H","D","C" };
+		
+	    vector<string> Num = {
+			"1","2","3","4","5","6","7","8","9","10","11","12","13" };	
+			
+		for(int i=0; i<4; i++){
+			for(int j=0; j<13; j++){
+				v.push_back(new Card_pre(i, Mark[i], j, Num[j]) );
+			}
+		}
+	}
+	
+	
+    random_device rand_dev;
+	mt19937 random;
+	
+	void shuffle(){
+		std::shuffle(v.begin(), v.end(), random);
+	}
+	
+	void show_card(){
+		for(auto card: v){
+			cout << card << ",";
+		}
+	}	
+
+};
+
+
+int main(){
+	Total* total = new Total();
+	total->shuffle();
+	total->show_card();
+}
